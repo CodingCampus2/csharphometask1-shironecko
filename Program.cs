@@ -7,13 +7,19 @@ namespace HomeworkTemplate
     {
         static void Main(string[] args)
         {
-            Func<Task1, string> TaskSolver = task =>
-            {
-                // Your solution goes here
-                // You can get all needed inputs from task.[Property]
-                // Good luck!
+            Func<Task1, string> TaskSolver = task => {
+                bool parsingSuccesful = float.TryParse(task.City.Population, out float population);
+                parsingSuccesful &= float.TryParse(task.City.SickPercentage, out float sickPercentage);
+                parsingSuccesful &= float.TryParse(task.Virus.KillProbability, out float killProbability);
+                if (!parsingSuccesful) {
+                    throw new ArgumentException("Wasn't able to parse all of the string parameters containing floats!");
+                }
 
-                return "My answer";
+                float peopleInfected = MathF.Truncate(population * sickPercentage);
+                float peopleDead = MathF.Truncate(peopleInfected * killProbability);
+
+                return
+                    $"There are {peopleInfected} people sick with {task.Virus.Name} in the city of {task.City.Name}, {peopleDead} of which died";
             };
 
             Task1.CheckSolver(TaskSolver);
